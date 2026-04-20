@@ -1,10 +1,11 @@
 # LLM Tools for Quantitative Research in Political and Social Sciences
 
 Materials for the workshop session *AI and Quantitative Methods: LLMs and 
-Quantitative Research in Social and Political Sciences*, University of Glasgow, 
-22 April 2026.
+Quantitative Research in Social and Political Sciences*
+University of Glasgow
+22 April 2026
 
-**Patrick E. Shea**  
+**[Patrick E. Shea](https://www.gla.ac.uk/schools/socialpolitical/staff/patrickshea/)**  
 Senior Lecturer, International Political Economy & Development  
 School of Social and Political Sciences, University of Glasgow  
 patrick.shea@glasgow.ac.uk
