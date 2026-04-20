@@ -11,7 +11,7 @@ date-format: long
 lang: en-GB
 format:
   html:
-    toc: true
+    toc: false
     toc-depth: 3
     number-sections: true
     code-fold: show
@@ -37,6 +37,9 @@ knitr::opts_chunk$set(
 This session covers LLM tools for quantitative research workflows, with a focus on practical applications in R. It's aimed at political and social science colleagues who already work with data and quantitative methods.
 
 This document covers more than what we will get to this session. I hope that this can act a reference guide. I'll walkthrough some topics (Claude Code and `quallmer`) in some detail today; other sections are here as reference material for you to explore afterward.
+
+All materials, code, and examples are available at 
+[github.com/patrickeshea/llm-quant-polisci](https://github.com/patrickeshea/llm-quant-polisci).
 
 ## What this session covers
 
