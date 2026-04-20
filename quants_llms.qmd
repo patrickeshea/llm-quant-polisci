@@ -1,0 +1,590 @@
+---
+title: "AI and Quantitative Methods"
+subtitle: "LLMs and Quantitative Research in Social and Political Sciences"
+author:
+  name: Patrick E. Shea
+  affiliations:
+    - name: "University of Glasgow<br>School of Social and Political Sciences<br>International Political Economy & Development"
+  email: patrick.shea@glasgow.ac.uk
+date: "22 April 2026"
+date-format: long
+lang: en-GB
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: show
+    code-copy: true
+    theme: cosmo
+    self-contained: true
+    link-external-newwindow: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  eval = FALSE,
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+# Introduction
+
+## About this session
+
+This session covers LLM tools for quantitative research workflows, with a focus on practical applications in R. It's aimed at political and social science colleagues who already work with data and quantitative methods.
+
+This document covers more than what we will get to this session. I hope that this can act a reference guide. I'll walkthrough some topics (Claude Code and `quallmer`) in some detail today; other sections are here as reference material for you to explore afterward.
+
+## What this session covers
+
+- LLM-assisted coding (autocomplete, chat, and agentic tools)
+- Text-as-data applications using LLMs
+- Choosing between open and closed models
+- Validation, reproducibility, and the role of researcher judgment
+
+## What this session does not cover
+
+This session deliberately excludes writing assistance, literature review tools, teaching applications, and ethics debates about AI in academia. Those are separate conversations worth having — they are just not the focus today.
+
+# AI-Assisted Coding in R
+
+## LLM Chat interfaces
+
+The most immediate way to use AI in your quant workflow: just paste an error message or a question into an LLM chat interface. Stack Overflow traffic has dropped a lot since the arrival of ChatGPT and similar tools because LLMs can interpret your specific error. LLMs can also help write code based on a natural language description of what you want to do. My recommendations (in order) are Claude, ChatGPT, and Gemini. I find that MS CoPilot (not to be confused with GitHub CoPilot) is not good.
+
+That said, there are good and bad ways to do this. A few principles that apply when asking LLMs for help writing code:
+
+- The more context, the better the response. Besides context of the project, I like to give LLMs a role to help (eg. You are a quantitative political scientist...)
+ 
+- Be specific about what you want. Examples help. 
+
+- Work in steps. Don't ask an LLM to write your entire analysis pipeline in one go. Break the task into pieces.
+
+- Specify your environment and libraries. LLMs default to Python and popular packages unless told otherwise.
+
+- Instruct the model to ask clarification questions before answering
+
+- Check the output. 
+
+For more on prompting, read [Claude's](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices) or [OpenAI's](https://developers.openai.com/api/docs/guides/prompt-guidance) guidelines. Also, see Claude Blattman's (aka Chris Blattman) [post](https://claudeblattman.com/essentials/prompting/) .
+
+## CoPilot in RStudio
+
+[GitHub CoPilot](https://github.com/features/copilot) is available through the university (staff have free access to GitHub Pro -- instructions on installation are [here](https://docs.posit.co/ide/user/ide/guide/tools/copilot.html)). It integrates directly into RStudio as an autocomplete tool — it watches what you type and suggests completions inline. You can accept suggestions with Tab, or trigger CoPilot to generate code based on comments or partial code. It's a great way to get started with AI-assisted coding because it requires no setup beyond installing the plugin (note that CoPilot "suggested" these last 2 sentences, as I wrote this in R).
+
+We'll walk through a simple example, but the same principles apply to more complex tasks. Start with "#" and then a command. The key is to write clear comments that CoPilot can use as prompts, and to break your task into small steps. The more complicated the task, the more important it is to work iteratively and check suggestions before accepting them. Possible examples:
+
+- load mtcars data and inspect it
+
+- I want to learn how to use linear regression in R
+
+- illustrate the central limit theorem with simulated data on coin flips in R
+
+
+```{r}
+
+# load mtcars data and inspect it
+
+
+```
+
+Tips for working with CoPilot
+
+- Write clear comments *before* code — CoPilot uses them as prompts
+- Break tasks into small steps rather than asking for everything at once
+- Always review suggestions before accepting
+
+## Chat interfaces inside RStudio (`ellmer`, `chattr`, Posit AI)
+
+Beyond CoPilot, there are several packages that bring LLM chat directly into RStudio:
+
+- **[`ellmer`](https://github.com/tidyverse/ellmer)**: A tidyverse-adjacent package for interacting with LLMs programmatically in R. This is the engine behind `quallmer` (see below) and supports OpenAI, Anthropic, Google, and local models via Ollama. Useful when you want to send structured prompts and process responses as data. It requires API calls, so will cost money if using a closed model (e.g. ChatGPT).
+
+- **[`chattr`](https://mlverse.github.io/chattr/)**: Provides a chat pane inside RStudio. See [this walkthrough](https://www.youtube.com/watch?v=dxBR191Vc8A). It requires API calls, so will cost money.
+
+- **[Posit AI integrations](https://posit.co/)**: Posit (the company behind RStudio) is building AI features into its products. These do cost money to use (though it has a free month trial).
+
+
+## Claude Code
+
+[Claude Code](https://code.claude.com) is Anthropic's command-line coding agent. Unlike the AI assistants discussed above, it can take higher-level instructions ("download World Bank aid data for all Sub-Saharan African countries since 2000 and merge it with the V-Dem data in my folder") and write multi-step scripts, create files, run code, and iterate on errors.
+
+This is not free — it requires an Anthropic subscription or API calls. But it can be a powerful way to automate coding tasks that would otherwise require back-and-forth with an LLM chat interface. Claude Code runs the code with your data (which will require you to provide access to folders and files on your machine), so it can be used for more complex data processing tasks.
+
+Note that Claude Code is really, really good at writing code. Too good, perhaps. I need to tell it to keep things simple and provide annotations for us mere humans. 
+
+Also note that Claude Code generates excellent Stata code, but doesn't run it by default — so you lose the iterative "write, run, debug, fix" loop that works well with R and Python. If you work primarily in Stata, the practical workflow is to use Claude Code (or a chat interface) to draft code, then run it yourself in Stata and paste back any errors. Claude tells me you can configure Claude Code to execute Stata via batch mode, but I haven't tried that yet.
+
+There are two ways I have used Claude Code: through the command line, and through [Visual Studio Code](https://code.visualstudio.com/). The latter is more intuitive, so worth exploring. The command line interface is more lightweight and doesn't require installing a new IDE. See [here](https://code.claude.com/docs) or [here](https://paulgp.substack.com/p/getting-started-with-claude-code) for instructions on how to get started with Claude Code on your machine. Here's a quick-start guide how to get started with the command line interface in a PC (once you have Claude Code installed):
+
+```
+# Start a session in your project directory
+cd ~/my-research-project
+claude
+```
+
+Once inside a Claude Code session, you can give instructions. I typically break research tasks into multiple prompts. This keeps the context manageable and lets me verify steps before committing to models.
+
+```
+Example Prompt 1:
+
+You are a research assistant on a political science project examining political dimensions of foreign aid allocation. You will be assisting in 
+data management and code writing. Note that this code will be used by an intermediate R user, so the code should be as simple as possible, 
+with detailed annotation. 
+
+Please do the following in R:
+
+1. Use the wbstats package to download net ODA received as a percentage of GNI 
+   (indicator DT.ODA.ODAT.GN.ZS) for all countries from 2000 to 2022.
+
+2. Load the VDem data (in C:\Users\Patrick Shea\Dropbox\AI Upskilling\april26session\CC_example) and extract the following variables for the same 
+   period: country_name, country_text_id, year, v2x_polyarchy (electoral 
+   democracy), v2x_corr (political corruption), e_gdppc (GDP per capita), 
+   and e_pop (population).
+
+3. Merge the two datasets using ISO3 country codes and year as the join keys.
+   Check the merge carefully — wbstats uses iso3c and V-Dem uses country_text_id, 
+   and there are some known mismatches (e.g., Kosovo, Serbia/Montenegro splits). 
+   Report any countries that fail to match.
+
+4. Save the merged dataset as aid_vdem_merged.csv in the working directory.
+
+5. Print a summary: number of country-years, date range, number of unique 
+   countries, and missingness on each variable.
+
+Do not run any analysis, regressions or visualizations — that will come in a second prompt. Ask clarification questions if necessary.
+
+
+
+---------------------------------------------
+
+
+Example Prompt 2:
+
+Load the merged dataset .Using this dataset:
+
+1. Produce descriptive statistics: mean, SD, min, max, N for aid (% of GNI), 
+   democracy, corruption, and GDP per capita. Present as a clean table.
+
+2. Create two plots:
+   - A scatter of aid against democracy, with a loess fit
+   - A time trend of average aid for high- vs low-democracy countries 
+     (split at the median of v2x_polyarchy)
+
+3. Run two OLS regressions with country and year fixed effects, using the 
+   fixest package:
+   - Aid dependency on democracy, controlling for log GDP per capita and log population
+   - Aid dependency on corruption, controlling for log GDP per capita and log population
+
+4. Present the regression results side by side using modelsummary or etable.
+
+5. Write a 3-sentence substantive interpretation of the results — flag any 
+   obvious endogeneity concerns.
+
+Save the plots as PNG files and the regression table as an HTML file. Again, the code 
+should be as simple as possible, with detailed annotations.
+
+```
+
+Claude Code will write the R script, run it, diagnose errors, and iterate until it works.
+
+### What Claude Code produced
+
+See [here](https://www.dropbox.com/scl/fi/eibnbi5oojp5vadqxzaa8/01_build_merged_data.R?rlkey=3s8stsen3k7q65sg0cizndmnt&dl=0) is the kind of output Prompt 1 generates — downloading World Bank aid flows using the `wbstats` package and merging to V-Dem governance indicators. And see [here](https://www.dropbox.com/scl/fi/uv6fniv2vf1j58gw35586/02_analysis.R?rlkey=weqh2cix682ntfxzs86nb71z8&dl=0) for the analysis. 
+
+### Claude, Claude Code, and Skills
+
+For repeated tasks, LLMs supports Skills — reusable instructions stored in .md files or skill folders. See the [Anthropic docs](https://code.claude.com/docs/en/skills) for details.
+
+# Research Applications: Text-as-Data and Experiments
+
+## Text as data
+
+One of the most developed applications of LLMs in political science is using them to classify, scale, or annotate text. LLMs can process meaning and context from text, which is a major step forward.
+
+### Applications
+
+LLMs can be used for:
+
+- **Classification**: Is this manifesto sentence about immigration? Is this survey response positive or negative toward a policy?
+- **Scaling**: Where does this text sit on a left-right dimension?
+- **Open-ended survey coding**: Categorising free-text responses into thematic groups.
+- **Beyond text**: LLMs can also process images and audio — the same logic applies to coding visual or spoken data.
+
+### Key literature
+
+Several recent papers demonstrate these applications in political science:
+
+- Benoit, Kenneth, Scott De Marchi, Conor Laver, Michael Laver, and Jinshuai Ma. 2026. "[Using Large Language Models to Analyze Political Texts Through Natural Language Understanding](https://doi.org/10.1111/ajps.70050)." *American Journal of Political Science*.
+
+- Martin, Lanny W. "From Manifesto Text to Expert Salience: Calibrating Large Language Models to Measure Party Issue Priorities." (Working paper)
+
+- DiGiuseppe, Matthew and Michael E. Flynn. 2026. "[Scaling Open-Ended Survey Responses Using LLM-Paired Comparisons](https://doi.org/10.1093/poq/nfaf013)." *Public Opinion Quarterly*.
+
+
+- Ornstein, Joseph T., Elise N. Blasingame, and Jake S. Truscott. 2025. "[How to Train Your Stochastic Parrot: Large Language Models for Political Texts](https://doi.org/10.1017/psrm.2024.71)." *Political Science Research and Methods*.
+
+- Le Mens, Gaël and Aina Gallego. 2025. "[Positioning Political Texts with Large Language Models by Asking and Averaging](https://doi.org/10.1017/pan.2024.28)." *Political Analysis*.
+
+## `quallmer`: LLM-assisted text coding in R
+
+The [`quallmer`](https://quallmer.github.io/quallmer/) package (Maerz and Benoit 2026) provides a structured workflow for LLM-assisted text coding in R. It is built on top of `ellmer` and is designed to enforce the kind of discipline that reviewers and replication archives expect: codebook-based annotation, systematic replication across models, inter-coder reliability statistics, validation against gold-standard human coding, and full audit trails.
+
+### Why `quallmer` over raw API calls?
+
+You can do all of this with `ellmer` directly, or with raw API calls. The value of `quallmer` is that it wraps a structured step-by-step workflow around LLM calls:
+
+1. **Define** your codebook with `qlm_codebook()` — specify the coding task, instructions, and output schema
+2. **Code** your data with `qlm_code()` — apply the codebook to texts using any LLM
+3. **Replicate** with `qlm_replicate()` — re-run with a different model, temperature, or codebook to test sensitivity
+4. **Compare** with `qlm_compare()` — compute inter-coder reliability (Krippendorff's alpha, Cohen's kappa) across run
+5.**Validate** with `qlm_validate()` — compute accuracy, precision, recall, and F1-score against gold-standard human coding
+6. **Document** with `qlm_trail()` — generate a complete audit trail with model versions, prompts, parameters, and outputs
+
+Each function produces a `quallmer` object — the model, settings, and parent object — so the audit trail reconstructs the full decision tree automatically.
+
+::: {.callout-tip}
+## `quallmer` also has built-in codebooks and predefined tasks
+
+The package ships with example codebooks (e.g., `data_codebook_immigration`, `data_codebook_sentiment`) and predefined tasks via `task_ideology()` and `task_fact()` for common annotation needs. The `annotate()` function provides an alternative interface for quick tasks. See the [quallmer documentation on predefined tasks](https://quallmer.github.io/quallmer/articles/pkgdown/examples/overview.html) for details.
+:::
+
+### Setup
+
+```{r}
+# Install quallmer (from CRAN or GitHub)
+# install.packages("quallmer")
+# or: pak::pak("quallmer/quallmer")
+
+library(quallmer)
+library(ellmer)
+library(quanteda)
+```
+
+You will need an API key for at least one LLM provider. Store it in your `.Renviron` file:
+
+```{r}
+# Run this once to open your .Renviron file:
+# usethis::edit_r_environ()
+# Then add one or more of:
+#   OPENAI_API_KEY=your-key-here
+#   ANTHROPIC_API_KEY=your-key-here
+# Restart R for the changes to take effect.
+```
+
+### Step 1: Define a codebook with `qlm_codebook()`
+
+A codebook specifies what the LLM should extract from each text. You provide a name, instructions (the prompt), and a schema defining the output structure using `ellmer`'s type system.
+
+We'll use the built-in immigration codebook from Benoit et al. (2016), which classifies UK manifesto sentences as relating to immigration or not, and if so, scores their policy stance.
+
+```{r}
+# Load the built-in immigration codebook
+cb <- data_codebook_immigration
+cb
+
+qlm_meta(cb, "instructions")  # what the LLM is told
+str(cb)                        # the full object including schema
+cb$schema@properties$immigration_position@description
+
+# Load the sample corpus of UK manifesto sentences
+
+set.seed(123456)
+corpus <- corpus_sample(data_corpus_manifsentsUK2010sample, size=5)
+corpus
+```
+
+You can also define your own codebook. For example, to classify the tone of political speeches (or something else entirely), you could create a custom codebook like this:
+
+```{r}
+# Custom codebook example
+tone_codebook <- qlm_codebook(
+  name = "Tone analysis",
+  instructions = "Classify the overall tone of this political text.",
+  schema = type_object(
+    tone = type_enum(
+      values = c("optimistic", "cautious", "urgent"),
+      description = "The dominant emotional tone"
+    ),
+    confidence = type_integer("Confidence in classification from 1-5")
+  )
+)
+```
+
+For our purposes, I'd like to amend the codebook, because the original instructions use negative values, and my experience is that LLMs get tripped up by negative values when classifying. 
+
+
+```{r}
+# Amending codebook 
+cb_amended <- qlm_codebook(
+  name = "Immigration policy coding (amended scale)",
+  instructions = qlm_meta(cb, "instructions"),
+  schema = type_object(
+    immigration_label = type_enum(
+      values = c("Not immigration", "Immigration"),
+      description = "Whether the sentence refers to immigration policy"
+    ),
+    immigration_position = type_integer(
+      description = "Policy position on immigration, coded as:
+      1 = Favorable and open immigration policy.
+      2 = Neutral or no clear position.
+      3 = Restrictive or anti-immigration policy."
+    )
+  )
+)
+```
+
+### Step 2: Code the texts with `qlm_code()`
+
+`qlm_code()` applies a codebook to a corpus. It accepts a data frame, a character vector, or a `quanteda` corpus object, sends each text to the specified LLM, and returns a `qlm_coded` object containing the results plus full metadata.
+
+```{r}
+
+# Code the corpus using OpenAI
+coded_gpt <- qlm_code(
+  corpus,
+  codebook = cb_amended,
+  model = "openai/gpt-4o-mini",
+  name = "gpt4o_mini"
+)
+
+# Inspect the results
+coded_gpt
+```
+
+The `model` argument takes a `"provider/model"` string. Common options include `"openai/gpt-4o-mini"`, `"openai/gpt-4o"`, `"anthropic/claude-sonnet-4-20250514"`, and `"ollama/llama3.2:1b"` (for local models via Ollama).
+
+### Step 3: Replicate with `qlm_replicate()`
+
+A core feature: re-run the same coding task with a different model or settings. `qlm_replicate()` inherits the codebook and data from the original run, so you only specify what changes.
+
+We'll replicate with a local open-source model to see how it compares. This contrast between a closed model (GPT-4o-mini) and a small open model (Llama 3.2 1B) is useful for two reasons: it tests sensitivity to model choice, and it previews the open vs. closed trade-offs we'll discuss later. This is a small model (1B parameters) — good for demos, but probably not part of your workflow. I'm  using the 1B Llama model because it runs on any laptop without a GPU. A larger open model (8B) would likely perform better, compared to GPT-4o-mini.
+
+```{r}
+# First, make sure Ollama is installed and running (https://ollama.com/)
+# Pull the model in your terminal: ollama pull llama3.2:1b
+#
+
+# Quick check that Ollama is running
+library(rollama)
+ping_ollama()
+```
+
+```{r}
+# Replicate the same coding task with Llama
+coded_llama <- qlm_replicate(
+  coded_gpt,
+  model = "ollama/llama3.2:1b",
+  name = "llama_1b"
+)
+
+coded_llama
+```
+
+You can also replicate with other closed models. The `model` argument accepts any provider supported by `ellmer`:
+
+
+### Step 4: Compare with `qlm_compare()`
+
+`qlm_compare()` takes two or more `qlm_coded` objects and computes inter-coder reliability statistics. It reports Krippendorff's alpha, Cohen's/Fleiss' kappa, and percent agreement, choosing appropriate metrics based on the measurement level (nominal, ordinal, interval) of each coded variable.
+
+```{r}
+# Compare GPT-4o-mini against Llama 3.2
+comparison <- qlm_compare(coded_gpt, coded_llama)
+comparison
+```
+
+This is where the open vs. closed distinction starts to matter empirically. A 1B-parameter open model is not expected to outperform a closed model on a classification tasks, unless some training/fine-tuning has occured. 
+
+### Step 5: Validate with `qlm_validate()`
+
+If you have gold-standard human codings, `qlm_validate()` computes accuracy, precision, recall, F1-score, and Cohen's kappa against them. You pass either a data frame with a .id column matching the coded texts, or a `qlm_coded` object created with `as_qlm_coded(is_gold = TRUE)`. The logic is the same as validating any classifier against a labelled test set.
+
+Gold-standard human coding also opens a second possibility: fine-tuning open models. If you have a few hundred human-coded examples and an off-the-shelf open model underperforms on your task (as Llama 3.2:1b did on the immigration coding above), you can use those labelled examples to fine-tune the open model on your specific classification task. A fine-tuned 7B or 8B parameter model can match or exceed a general-purpose closed model on a well-defined coding task, at no cost and with the data staying on your machine. 
+
+### Step 6: Document with `qlm_trail()`
+
+`qlm_trail()` produces a complete audit trail — every model, parameter, timestamp, prompt, and parent-child relationship across your workflow. It can also generate a Quarto report and an RDS archive for replication.
+
+```{r}
+# View the audit trail
+trail <- qlm_trail(coded_gpt, coded_llama, comparison)
+trail
+
+
+```
+
+This provides exact model versions, prompts, parameters, and outputs, which may be helpful for writing up methods sections and for replication materials.
+
+### Extended example: coding policy documents with `quallmer`
+
+For a more developed example using this approach, see the 
+[Distributional Impact Analysis script](https://github.com/patrickeshea/llm-quant-polisci/blob/main/examples/imf/Distributional%20Impact%20Analysis.R), 
+which codes paragraphs from the 
+[April 2026 IMF World Economic Outlook Executive Summary](https://github.com/patrickeshea/llm-quant-polisci/blob/main/examples/imf/execsum.pdf). The codebook defines seven structured fields per paragraph: whether the IMF identifies disproportionate economic harm across country groups, which group is affected, who the comparator is, the transmission channel (commodity prices, financial conditions, trade, fiscal capacity, and so on), how the asymmetry is quantified, whether a policy remedy is paired with the claim, and the quoted textual evidence. 
+
+The script runs the full pipeline — PDF ingestion, corpus construction, codebook definition, LLM coding, and post-processing — in `R`. 
+
+
+
+## Experiments and synthetic data
+
+LLMs are also being used in experimental research. This isn't my area of expertise, but I thought there were three areas worth flagging:
+
+**Synthetic data generation.** LLMs can generate simulated survey responses for power analysis, pre-registration planning, or methodological testing (such as replication, see Ray Duch's [Talking to Machines project](https://talkingtomachines.org/projects/) ).
+
+**LLMs helping with experimental design.** Researchers can use LLMs to generate or design experimental stimuli (e.g., news articles, policy descriptions, see [Charles Crabtree](https://youtu.be/S6jgMNp0FoM?si=pN82i46CxqcF3HMM) for examples). 
+
+**LLMs as part of the design.** More designs are embedding LLMs in the experiment itself — for example, using an LLM to generate persuasive messages in a survey experiment, or to create dynamic stimuli that change based on participant responses. For example see
+
+- DiGiuseppe, Matthew and Joshua Robison. "[Perceived Political Bias in LLMs Reduces Persuasive Abilities](https://arxiv.org/abs/2602.18092)." Preprint on arXiv.
+
+- Velez, Yamil, Patrick Liu, and Scott Clifford. 2025. "[When Information Affects Attitudes: The Effectiveness of Targeting Attitude-Relevant Beliefs](https://doi.org/10.33774/apsa-2025-m6rbw-v2)." APSR Preprints.
+
+
+# Open vs. Closed Models
+
+When incorporating LLMs into a research workflow, one decision is whether to use a closed (proprietary, such as Claude or OpenAI) or open (open-weight) model. This depends on your data, your task, and your priorities.
+
+## Decision framework
+
+| Consideration | Closed models | Open models |
+|---|---|---|
+| **Examples** | GPT-5, Claude, Gemini | Llama 3, Mixtral, Qwen |
+| **Data sensitivity** | Data leaves your machine; sent to provider servers | Can run locally; data stays on your hardware |
+| **Performance** | Generally stronger on complex tasks (for now) | Variable off the shelf; competitive on many narrow tasks, especially classification and scaling. |
+| **Reproducibility** | Provider can update/retire models without notice | You control the exact model version (doesn't guarantee same results) |
+| **Transparency** | Weights and training data not public | Weights available; training data often documented |
+| **Cost** | Pay per token via API | Free to run, but requires compute (GPUs) |
+| **Good for** | Exploratory work, quick classification, non-sensitive data | Sensitive data, archival reproducibility, transparency |
+| **Setup effort** | Minimal — sign up for API key | Higher — need local infrastructure |
+
+## Practical guidance
+
+For most researchers closed models via API are the pragmatic choice — they're easier to set up, perform well, and are appropriate for non-sensitive data. The `ellmer` and `quallmer` packages support both closed and open providers, so you can switch later without rewriting your code.
+
+Use open models when:
+
+- Your data contains sensitive or identifiable information that shouldn't leave your machine
+- Reproducibility is important
+- You want better transparency 
+
+### A note on API costs
+
+Three things drive cost: input tokens (your prompt plus the text being coded), output tokens (the model's response), and the model tier (Claude Opus and GPT-5 cost roughly 5–15x what their smaller counterparts do).
+
+Before running a full coding job, estimate the cost on a sample of 50–100 items. Most providers display token usage per call, and `ellmer` logs this automatically. For systematic coding tasks, smaller or older models often perform nearly as well as the flagship models at a fraction of the cost. It will save you money to validate on a sample first rather than defaulting to the most expensive option.
+
+### Accessing Open LLMs: Google Colab
+
+The practical objection to open models is usually hardware — running Llama or Mistral locally requires a decent GPU. [Google Colab](https://colab.research.google.com) solves this by offering free GPU access in a browser-based notebook. You can run open-weight models there without downloading anything to your machine. You can trial a few open models before committing the space on your machine to them.
+
+
+::: {.callout-note}
+## More domain-specific LLMs are being developed
+
+Disciplinary fine-tuning may eventually give open models an edge for political and social sciences' tasks. Examples:
+
+- APSI (Automated Political Stance Identifier): [web-based tool](https://apsi.sc.hpi.de/) that classifies text on left–right, populist/pluralist, and liberal democratic dimensions using an NLI model with hypotheses grounded in political science theory. Can use their web interface or can be downloaded to run locally.
+
+- Political DEBATE (Burnham et al. 2025): open, efficient classifiers that work well with little or no task-specific training data.
+
+- Extractive vs. generative approaches (Brandt et al. 2025): task-specific extractive models can outperform general-purpose LLMs on structured classification like conflict event coding.
+
+When the task is well-defined and reproducibility matters, a purpose-built model may outperform a general LLM.
+:::
+
+
+
+
+# Am I Needed? Validation, Reproducibility, and Researcher Judgment
+
+Am I needed anymore for data analysis? The short answer: **yes, more than ever.**
+
+LLMs are powerful tools for tasks that previously required time consuming human coding. Your job shifts from doing the coding to designing the coding scheme, choosing the right model and parameters, validating output, and interpreting results in substantive context. These are tasks that require domain expertise, and they matter more, not less, when the coding itself is automated.
+
+LLM-assisted coding hopefully shifts researcher labour toward the parts of the workflow that distinguished good quant work from bad.
+
+## Why validation matters
+
+LLMs can produce plausible-looking output that is systematically wrong. They can misunderstand domain-specific language, apply contemporary framings to historical texts, or produce internally consistent but substantively incorrect classifications. Without validation against human coding or known benchmarks, you have no way of knowing.
+
+## Reproducibility checklist
+
+When using LLMs in a research workflow, document and control for the following:
+
+**Temperature settings.** Lower temperature (0 or near 0) produces more deterministic output. For classification tasks, you almost always want low temperature. Higher temperature introduces randomness — useful for creative generation, but not for systematic coding.
+
+**Model version control.** Record the exact model identifier (e.g., `claude-sonnet-4-20250514`, not just "Claude"). Providers update models, and a model that performs well today may behave differently after an update.
+
+**Document everything.** Log prompts, model parameters, API call metadata, and outputs. The `qlm_trail()` function in `quallmer` does this automatically. If you're using `ellmer` directly or raw API calls, build logging into your pipeline.
+
+**Automate workflows.** Script your entire pipeline from data loading to LLM calls to output processing. Don't rely on copy-pasting from a chat interface. This ensures reproducibility and makes it possible for others to replicate your work.
+
+**Multiple coding runs.** Run your coding task multiple times and assess consistency. Use inter-coder reliability metrics (Krippendorff's alpha, Cohen's kappa) to measure agreement across runs, models, and human coders. `qlm_compare()` computes these automatically.
+
+**Data sharing.** Share your prompts, codebooks, model settings, and coded output alongside your data and code. The `qlm_trail()` audit trail and `qlm_compare()` objects are designed to be included in replication archives.
+
+::: {.callout-tip}
+## The `quallmer` audit trail
+
+`quallmer` was designed specifically to address reproducibility concerns. Its `qlm_trail()` function produces a complete record of every decision in the coding workflow — model, temperature, prompt, codebook, timestamps, and outputs. It also generates a Quarto report with replication instructions. 
+:::
+
+
+# Conclusion
+
+This session was designed to start a conversation about LLMs and research in SPS. Things are changing rapidly in this space, and best practices are still being worked out in our discipline. I've tried to prioritise what seems most useful for quantitative research workflows right now. There is plenty I've left out, and plenty I'm still working out myself. If you want to continue the discussion — on specific research applications, on infrastructure at Glasgow, or on approaches I haven't covered — please get in touch.
+
+
+
+# References {.unnumbered}
+
+## Cited papers and useful applications of LLM use {.unnumbered}
+
+Argyle, Lisa P., Ethan C. Busby, Nancy Fulda, Joshua R. Gubler, Christopher Rytting, and David Wingate. 2023. "Out of One, Many: Using Language Models to Simulate Human Samples." *Political Analysis* 31(3): 337–351. <https://doi.org/10.1017/pan.2023.2>
+
+Benoit, Kenneth, Scott De Marchi, Conor Laver, Michael Laver, and Jinshuai Ma. 2026. "Using Large Language Models to Analyze Political Texts Through Natural Language Understanding." *American Journal of Political Science*. <https://doi.org/10.1111/ajps.70050>
+
+Bisbee, James, Joshua D. Clinton, Cassy Dorff, Brenton Kenkel, and Jennifer M. Larson. 2024. "Synthetic Replacements for Human Survey Data? The Perils of Large Language Models." *Political Analysis* 32(4): 401–416. <https://doi.org/10.1017/pan.2024.5>
+
+Brandt, Patrick T., Sultan Alsarra, Vito D'Orazio, et al. 2025. "Extractive versus Generative Language Models for Political Conflict Text Classification." Political Analysis. https://doi.org/10.1017/pan.2025.10027
+
+Burnham, Michael, Kayla Kahn, Rachel Y. Wang, and Roger X. Peng. 2025. "Political DEBATE: Efficient Zero-Shot and Few-Shot Classifiers for Political Text." Political Analysis. https://doi.org/10.1017/pan.2025.10028
+
+DiGiuseppe, Matthew and Michael E. Flynn. 2026. "Scaling Open-Ended Survey Responses Using LLM-Paired Comparisons." *Public Opinion Quarterly*. <https://doi.org/10.1093/poq/nfaf013>
+
+DiGiuseppe, Matthew and Patrick E. Shea. 2025. "Information, Uncertainty, & Public Support for Brinkmanship During the 2023 Debt Limit Negotiations." *British Journal of Political Science* 55(1). <https://doi.org/10.1017/S0007123424000462>
+
+DiGiuseppe, Matthew and Joshua Robison. "Perceived Political Bias in LLMs Reduces Persuasive Abilities." Preprint on arXiv. <https://arxiv.org/abs/2602.18092>
+
+Gilardi, Fabrizio, Meysam Alizadeh, and Maël Kubli. 2023. "ChatGPT Outperforms Crowd Workers for Text-Annotation Tasks." *Proceedings of the National Academy of Sciences* 120(30). <https://doi.org/10.1073/pnas.2305016120>
+
+Halterman, Andrew, and Katherine A. Keith. 2026. "Codebook LLMs: Evaluating LLMs as Measurement Tools for Political Science Concepts." *Political Analysis.* <https://doi.org/10.1017/pan.2025.10017>
+
+Le Mens, Gaël and Aina Gallego. 2025. "Positioning Political Texts with Large Language Models by Asking and Averaging." *Political Analysis*. <https://doi.org/10.1017/pan.2024.28>
+
+Martin, Lanny W. "From Manifesto Text to Expert Salience: Calibrating Large Language Models to Measure Party Issue Priorities." (Appendix available upon acceptance for publication.)
+
+Ornstein, Joseph T., Elise N. Blasingame, and Jake S. Truscott. 2025. "How to Train Your Stochastic Parrot: Large Language Models for Political Texts." *Political Science Research and Methods*. <https://doi.org/10.1017/psrm.2024.71>
+
+Törnberg, Petter. 2025. "Large Language Models Outperform Expert Coders and Supervised Classifiers at Annotating Political Social Media Messages." *Social Science Computer Review.* <https://doi.org/10.1177/08944393241286471>
+
+Velez, Yamil, Patrick Liu, and Scott Clifford. 2025. "When Information Affects Attitudes: The Effectiveness of Targeting Attitude-Relevant Beliefs." APSA Preprints. <https://doi.org/10.33774/apsa-2025-m6rbw-v2>
+
+Wu, Patrick Y., Joshua A. Tucker, Jonathan Nagler, and Solomon Messing. 2023. "Large Language Models Can Be Used to Estimate the Latent Positions of Politicians." arXiv preprint. <https://arxiv.org/abs/2303.12057>
+
+## Useful packages, tools, and websites {.unnumbered}
+
+- [`quallmer`](https://quallmer.github.io/quallmer/) — AI-assisted qualitative data coding (Maerz and Benoit 2026). [CRAN](https://CRAN.R-project.org/package=quallmer)
+- [`quallmer.app`](https://github.com/quallmer/quallmer.app) — Interactive Shiny app for manual coding, reviewing LLM annotations, and computing agreement metrics
+- [`ellmer`](https://github.com/tidyverse/ellmer) — Chat with LLMs in R (Wickham et al. 2025)
+- [`chattr`](https://mlverse.github.io/chattr/) — Chat pane for RStudio
+- [GitHub CoPilot](https://github.com/features/copilot) — AI autocomplete for RStudio
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) — Agentic coding from the command line
+- [Visual Studio Code](https://code.visualstudio.com/) - useful interface to connect to LLMs, R, Claude Code, etc, in one place
+- [Google Colab](https://colab.research.google.com)
+- [Claude Blattman](https://claudeblattman.com/) - useful tips and sources for incorporating LLMs into workflow
