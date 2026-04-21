@@ -134,8 +134,7 @@ Once inside a Claude Code session, you can give instructions. I typically break 
 ```
 Example Prompt 1:
 
-You are a research assistant on a political science project examining political dimensions of foreign aid allocation. You will be assisting in 
-data management and code writing. Note that this code will be used by an intermediate R user, so the code should be as simple as possible, 
+You are a research assistant on a political science project examining political dimensions of foreign aid allocation. You will be assisting indata management and code writing. Note that this code will be used by an intermediate R user, so the code should be as simple as possible, 
 with detailed annotation. 
 
 Please do the following in R:
@@ -143,7 +142,7 @@ Please do the following in R:
 1. Use the wbstats package to download net ODA received as a percentage of GNI 
    (indicator DT.ODA.ODAT.GN.ZS) for all countries from 2000 to 2022.
 
-2. Load the VDem data (in C:\Users\Patrick Shea\Dropbox\AI Upskilling\april26session\CC_example) and extract the following variables for the same 
+2. Load the VDem data (in "C:\Users\Patrick Shea\Dropbox\AI Upskilling\Walkthru\april26session\CC_example) and extract the following variables for the same 
    period: country_name, country_text_id, year, v2x_polyarchy (electoral 
    democracy), v2x_corr (political corruption), e_gdppc (GDP per capita), 
    and e_pop (population).
@@ -184,11 +183,9 @@ Load the merged dataset .Using this dataset:
 
 4. Present the regression results side by side using modelsummary or etable.
 
-5. Write a 3-sentence substantive interpretation of the results — flag any 
-   obvious endogeneity concerns.
+5. Write a 3-sentence substantive interpretation of the results — flag any obvious endogeneity concerns.
 
-Save the plots as PNG files and the regression table as an HTML file. Again, the code 
-should be as simple as possible, with detailed annotations.
+Save the plots as PNG files and the regression table as an HTML file. Again, the code should be as simple as possible, with detailed annotations.
 
 ```
 
@@ -196,7 +193,7 @@ Claude Code will write the R script, run it, diagnose errors, and iterate until 
 
 ### What Claude Code produced
 
-See [here](https://www.dropbox.com/scl/fi/eibnbi5oojp5vadqxzaa8/01_build_merged_data.R?rlkey=3s8stsen3k7q65sg0cizndmnt&dl=0) is the kind of output Prompt 1 generates — downloading World Bank aid flows using the `wbstats` package and merging to V-Dem governance indicators. And see [here](https://www.dropbox.com/scl/fi/uv6fniv2vf1j58gw35586/02_analysis.R?rlkey=weqh2cix682ntfxzs86nb71z8&dl=0) for the analysis. 
+See [here](https://github.com/patrickeshea/llm-quant-polisci/blob/main/examples/CC_example/01_merge_aid_vdem.R) is the kind of output Prompt 1 generates — downloading World Bank aid flows using the `wbstats` package and merging to V-Dem governance indicators. And see [here](https://github.com/patrickeshea/llm-quant-polisci/blob/main/examples/CC_example/02_analysis.R) for the analysis. 
 
 ### Claude, Claude Code, and Skills
 

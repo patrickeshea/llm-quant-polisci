@@ -2201,75 +2201,10 @@ vertical-align: -.125em;
 
 </head>
 
-<body class="quarto-light">
+<body class="fullcontent quarto-light">
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-  <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a>
-  <ul class="collapse">
-  <li><a href="#about-this-session" id="toc-about-this-session" class="nav-link" data-scroll-target="#about-this-session"><span class="header-section-number">1.1</span> About this session</a></li>
-  <li><a href="#what-this-session-covers" id="toc-what-this-session-covers" class="nav-link" data-scroll-target="#what-this-session-covers"><span class="header-section-number">1.2</span> What this session covers</a></li>
-  <li><a href="#what-this-session-does-not-cover" id="toc-what-this-session-does-not-cover" class="nav-link" data-scroll-target="#what-this-session-does-not-cover"><span class="header-section-number">1.3</span> What this session does not cover</a></li>
-  </ul></li>
-  <li><a href="#ai-assisted-coding-in-r" id="toc-ai-assisted-coding-in-r" class="nav-link" data-scroll-target="#ai-assisted-coding-in-r"><span class="header-section-number">2</span> AI-Assisted Coding in R</a>
-  <ul class="collapse">
-  <li><a href="#llm-chat-interfaces" id="toc-llm-chat-interfaces" class="nav-link" data-scroll-target="#llm-chat-interfaces"><span class="header-section-number">2.1</span> LLM Chat interfaces</a></li>
-  <li><a href="#copilot-in-rstudio" id="toc-copilot-in-rstudio" class="nav-link" data-scroll-target="#copilot-in-rstudio"><span class="header-section-number">2.2</span> CoPilot in RStudio</a></li>
-  <li><a href="#chat-interfaces-inside-rstudio-ellmer-chattr-posit-ai" id="toc-chat-interfaces-inside-rstudio-ellmer-chattr-posit-ai" class="nav-link" data-scroll-target="#chat-interfaces-inside-rstudio-ellmer-chattr-posit-ai"><span class="header-section-number">2.3</span> Chat interfaces inside RStudio (<code>ellmer</code>, <code>chattr</code>, Posit AI)</a></li>
-  <li><a href="#claude-code" id="toc-claude-code" class="nav-link" data-scroll-target="#claude-code"><span class="header-section-number">2.4</span> Claude Code</a>
-  <ul class="collapse">
-  <li><a href="#what-claude-code-produced" id="toc-what-claude-code-produced" class="nav-link" data-scroll-target="#what-claude-code-produced"><span class="header-section-number">2.4.1</span> What Claude Code produced</a></li>
-  <li><a href="#claude-claude-code-and-skills" id="toc-claude-claude-code-and-skills" class="nav-link" data-scroll-target="#claude-claude-code-and-skills"><span class="header-section-number">2.4.2</span> Claude, Claude Code, and Skills</a></li>
-  </ul></li>
-  </ul></li>
-  <li><a href="#research-applications-text-as-data-and-experiments" id="toc-research-applications-text-as-data-and-experiments" class="nav-link" data-scroll-target="#research-applications-text-as-data-and-experiments"><span class="header-section-number">3</span> Research Applications: Text-as-Data and Experiments</a>
-  <ul class="collapse">
-  <li><a href="#text-as-data" id="toc-text-as-data" class="nav-link" data-scroll-target="#text-as-data"><span class="header-section-number">3.1</span> Text as data</a>
-  <ul class="collapse">
-  <li><a href="#applications" id="toc-applications" class="nav-link" data-scroll-target="#applications"><span class="header-section-number">3.1.1</span> Applications</a></li>
-  <li><a href="#key-literature" id="toc-key-literature" class="nav-link" data-scroll-target="#key-literature"><span class="header-section-number">3.1.2</span> Key literature</a></li>
-  </ul></li>
-  <li><a href="#quallmer-llm-assisted-text-coding-in-r" id="toc-quallmer-llm-assisted-text-coding-in-r" class="nav-link" data-scroll-target="#quallmer-llm-assisted-text-coding-in-r"><span class="header-section-number">3.2</span> <code>quallmer</code>: LLM-assisted text coding in R</a>
-  <ul class="collapse">
-  <li><a href="#why-quallmer-over-raw-api-calls" id="toc-why-quallmer-over-raw-api-calls" class="nav-link" data-scroll-target="#why-quallmer-over-raw-api-calls"><span class="header-section-number">3.2.1</span> Why <code>quallmer</code> over raw API calls?</a></li>
-  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">3.2.2</span> Setup</a></li>
-  <li><a href="#step-1-define-a-codebook-with-qlm_codebook" id="toc-step-1-define-a-codebook-with-qlm_codebook" class="nav-link" data-scroll-target="#step-1-define-a-codebook-with-qlm_codebook"><span class="header-section-number">3.2.3</span> Step 1: Define a codebook with <code>qlm_codebook()</code></a></li>
-  <li><a href="#step-2-code-the-texts-with-qlm_code" id="toc-step-2-code-the-texts-with-qlm_code" class="nav-link" data-scroll-target="#step-2-code-the-texts-with-qlm_code"><span class="header-section-number">3.2.4</span> Step 2: Code the texts with <code>qlm_code()</code></a></li>
-  <li><a href="#step-3-replicate-with-qlm_replicate" id="toc-step-3-replicate-with-qlm_replicate" class="nav-link" data-scroll-target="#step-3-replicate-with-qlm_replicate"><span class="header-section-number">3.2.5</span> Step 3: Replicate with <code>qlm_replicate()</code></a></li>
-  <li><a href="#step-4-compare-with-qlm_compare" id="toc-step-4-compare-with-qlm_compare" class="nav-link" data-scroll-target="#step-4-compare-with-qlm_compare"><span class="header-section-number">3.2.6</span> Step 4: Compare with <code>qlm_compare()</code></a></li>
-  <li><a href="#step-5-validate-with-qlm_validate" id="toc-step-5-validate-with-qlm_validate" class="nav-link" data-scroll-target="#step-5-validate-with-qlm_validate"><span class="header-section-number">3.2.7</span> Step 5: Validate with <code>qlm_validate()</code></a></li>
-  <li><a href="#step-6-document-with-qlm_trail" id="toc-step-6-document-with-qlm_trail" class="nav-link" data-scroll-target="#step-6-document-with-qlm_trail"><span class="header-section-number">3.2.8</span> Step 6: Document with <code>qlm_trail()</code></a></li>
-  <li><a href="#extended-example-coding-policy-documents-with-quallmer" id="toc-extended-example-coding-policy-documents-with-quallmer" class="nav-link" data-scroll-target="#extended-example-coding-policy-documents-with-quallmer"><span class="header-section-number">3.2.9</span> Extended example: coding policy documents with <code>quallmer</code></a></li>
-  </ul></li>
-  <li><a href="#experiments-and-synthetic-data" id="toc-experiments-and-synthetic-data" class="nav-link" data-scroll-target="#experiments-and-synthetic-data"><span class="header-section-number">3.3</span> Experiments and synthetic data</a></li>
-  </ul></li>
-  <li><a href="#open-vs.-closed-models" id="toc-open-vs.-closed-models" class="nav-link" data-scroll-target="#open-vs.-closed-models"><span class="header-section-number">4</span> Open vs. Closed Models</a>
-  <ul class="collapse">
-  <li><a href="#decision-framework" id="toc-decision-framework" class="nav-link" data-scroll-target="#decision-framework"><span class="header-section-number">4.1</span> Decision framework</a></li>
-  <li><a href="#practical-guidance" id="toc-practical-guidance" class="nav-link" data-scroll-target="#practical-guidance"><span class="header-section-number">4.2</span> Practical guidance</a>
-  <ul class="collapse">
-  <li><a href="#a-note-on-api-costs" id="toc-a-note-on-api-costs" class="nav-link" data-scroll-target="#a-note-on-api-costs"><span class="header-section-number">4.2.1</span> A note on API costs</a></li>
-  <li><a href="#accessing-open-llms-google-colab" id="toc-accessing-open-llms-google-colab" class="nav-link" data-scroll-target="#accessing-open-llms-google-colab"><span class="header-section-number">4.2.2</span> Accessing Open LLMs: Google Colab</a></li>
-  </ul></li>
-  </ul></li>
-  <li><a href="#am-i-needed-validation-reproducibility-and-researcher-judgment" id="toc-am-i-needed-validation-reproducibility-and-researcher-judgment" class="nav-link" data-scroll-target="#am-i-needed-validation-reproducibility-and-researcher-judgment"><span class="header-section-number">5</span> Am I Needed? Validation, Reproducibility, and Researcher Judgment</a>
-  <ul class="collapse">
-  <li><a href="#why-validation-matters" id="toc-why-validation-matters" class="nav-link" data-scroll-target="#why-validation-matters"><span class="header-section-number">5.1</span> Why validation matters</a></li>
-  <li><a href="#reproducibility-checklist" id="toc-reproducibility-checklist" class="nav-link" data-scroll-target="#reproducibility-checklist"><span class="header-section-number">5.2</span> Reproducibility checklist</a></li>
-  </ul></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">6</span> Conclusion</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a>
-  <ul class="collapse">
-  <li><a href="#cited-papers-and-useful-applications-of-llm-use" id="toc-cited-papers-and-useful-applications-of-llm-use" class="nav-link" data-scroll-target="#cited-papers-and-useful-applications-of-llm-use">Cited papers and useful applications of LLM use</a></li>
-  <li><a href="#useful-packages-tools-and-websites" id="toc-useful-packages-tools-and-websites" class="nav-link" data-scroll-target="#useful-packages-tools-and-websites">Useful packages, tools, and websites</a></li>
-  </ul></li>
-  </ul>
-</nav>
-</div>
+
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -2393,8 +2328,7 @@ claude</code></pre>
 <p>Once inside a Claude Code session, you can give instructions. I typically break research tasks into multiple prompts. This keeps the context manageable and lets me verify steps before committing to models.</p>
 <pre><code>Example Prompt 1:
 
-You are a research assistant on a political science project examining political dimensions of foreign aid allocation. You will be assisting in 
-data management and code writing. Note that this code will be used by an intermediate R user, so the code should be as simple as possible, 
+You are a research assistant on a political science project examining political dimensions of foreign aid allocation. You will be assisting indata management and code writing. Note that this code will be used by an intermediate R user, so the code should be as simple as possible, 
 with detailed annotation. 
 
 Please do the following in R:
@@ -2402,7 +2336,7 @@ Please do the following in R:
 1. Use the wbstats package to download net ODA received as a percentage of GNI 
    (indicator DT.ODA.ODAT.GN.ZS) for all countries from 2000 to 2022.
 
-2. Load the VDem data (in C:\Users\Patrick Shea\Dropbox\AI Upskilling\april26session\CC_example) and extract the following variables for the same 
+2. Load the VDem data (in &quot;C:\Users\Patrick Shea\Dropbox\AI Upskilling\Walkthru\april26session\CC_example) and extract the following variables for the same 
    period: country_name, country_text_id, year, v2x_polyarchy (electoral 
    democracy), v2x_corr (political corruption), e_gdppc (GDP per capita), 
    and e_pop (population).
@@ -2443,16 +2377,14 @@ Load the merged dataset .Using this dataset:
 
 4. Present the regression results side by side using modelsummary or etable.
 
-5. Write a 3-sentence substantive interpretation of the results — flag any 
-   obvious endogeneity concerns.
+5. Write a 3-sentence substantive interpretation of the results — flag any obvious endogeneity concerns.
 
-Save the plots as PNG files and the regression table as an HTML file. Again, the code 
-should be as simple as possible, with detailed annotations.
+Save the plots as PNG files and the regression table as an HTML file. Again, the code should be as simple as possible, with detailed annotations.
 </code></pre>
 <p>Claude Code will write the R script, run it, diagnose errors, and iterate until it works.</p>
 <section id="what-claude-code-produced" class="level3" data-number="2.4.1">
 <h3 data-number="2.4.1" class="anchored" data-anchor-id="what-claude-code-produced"><span class="header-section-number">2.4.1</span> What Claude Code produced</h3>
-<p>See <a href="https://www.dropbox.com/scl/fi/eibnbi5oojp5vadqxzaa8/01_build_merged_data.R?rlkey=3s8stsen3k7q65sg0cizndmnt&amp;dl=0">here</a> is the kind of output Prompt 1 generates — downloading World Bank aid flows using the <code>wbstats</code> package and merging to V-Dem governance indicators. And see <a href="https://www.dropbox.com/scl/fi/uv6fniv2vf1j58gw35586/02_analysis.R?rlkey=weqh2cix682ntfxzs86nb71z8&amp;dl=0">here</a> for the analysis.</p>
+<p>See <a href="https://github.com/patrickeshea/llm-quant-polisci/blob/main/examples/CC_example/01_merge_aid_vdem.R">here</a> is the kind of output Prompt 1 generates — downloading World Bank aid flows using the <code>wbstats</code> package and merging to V-Dem governance indicators. And see <a href="https://github.com/patrickeshea/llm-quant-polisci/blob/main/examples/CC_example/02_analysis.R">here</a> for the analysis.</p>
 </section>
 <section id="claude-claude-code-and-skills" class="level3" data-number="2.4.2">
 <h3 data-number="2.4.2" class="anchored" data-anchor-id="claude-claude-code-and-skills"><span class="header-section-number">2.4.2</span> Claude, Claude Code, and Skills</h3>
