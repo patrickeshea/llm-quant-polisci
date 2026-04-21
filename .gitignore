@@ -42,6 +42,9 @@ vignettes/*.pdf
 # pkgdown site
 docs/
 
+#Ignore V-Dem Push (too large)
+examples/CC_example/V-Dem-CY-Full+Others-v14.csv
+
 # translation temp files
 po/*~
 
