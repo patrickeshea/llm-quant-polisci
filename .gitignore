@@ -50,3 +50,6 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+examples/CC_example/V-Dem-CY-Full+Others-v14.csv
+
